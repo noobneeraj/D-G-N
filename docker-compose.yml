@@ -1,0 +1,34 @@
+version: '3.8'
+
+# " Django + Gunicorn " Container Framework
+services:
+  gunicorn:
+    volumes:
+      - static:/static
+    env_file:
+      - .env
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+
+# " Nginx " Container Framework      
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - gunicorn
+
+volumes:
+  static:
+
+
+
+# Changes to be make in new Project
+# dont change Docker-compose file
+# change must be done in 'entrypoint.sh' file
+# In the line of 
+#        'gunicorn django_project.wsgi:application --bind 0.0.0.0:800' change "django_project.wsgi" to "<project_name.wsgi>"
